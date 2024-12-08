@@ -7,11 +7,18 @@ description 'Just another diving resource'
 repository 'https://github.com/mafewtm/m_diving'
 version '1.0.0'
 
+ox_lib 'locale'
+
 shared_script '@ox_lib/init.lua'
 
 client_script 'client/main.lua'
 
 server_script 'server/main.lua'
+
+files {
+    'config/client.lua',
+    'locales/*.json'
+}
 
 lua54 'yes'
 use_experimental_fxv2_oal 'yes'

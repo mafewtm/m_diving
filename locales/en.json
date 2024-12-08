@@ -1,0 +1,8 @@
+{
+  "put_on_gear": "Putting on the diving gear...",
+  "remove_gear": "Removing the diving gear...",
+  "canceled": "Canceled...",
+  "cannot_right_now": "You cannot do this right now...",
+  "failed_spawn": "Failed to spawn the tank",
+  "failed_get_control": "Failed to gain control of the prop"
+}
