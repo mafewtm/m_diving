@@ -16,9 +16,7 @@ local function deleteTank(source)
 end
 
 local function getNewLocation()
-    if table.type(wreck) ~= 'empty' then
-        wreck = {}
-    end
+    wreck = {}
 
     local wreckId = math.random(1, #sharedConfig.wrecks)
     local wreckType = math.random() < 0.5 and 'salvage' or 'looting'

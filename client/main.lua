@@ -73,10 +73,10 @@ exports('UseDivingGear', useDivingGear)
 
 ---@param wreckData table
 local function setDivingLocation(wreckData)
-    if wreckZone then
+    if table.type(wreckZone) ~= 'empty' then
         wreckZone:remove()
 
-        wreckZone = 0
+        wreckZone = nil
     end
 
     local wreck = sharedConfig.wrecks[wreckData.id]
