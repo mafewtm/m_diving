@@ -1,18 +1,23 @@
 local config = require 'config.client'
 local sharedConfig = require 'config.shared'
-local wreckZone
+local wreckZone = {}
+local wreckBlip = 0
 
 ---@param wreck vector3
 local function createBlip(wreck)
-    local blip = AddBlipForCoord(wreck.x, wreck.y, wreck.z)
+    if wreckBlip then
+        RemoveBlip(wreckBlip)
+    end
 
-    SetBlipSprite(blip, 780)
-    SetBlipScale(blip, 0.8)
-    SetBlipColour(blip, 29)
-    SetBlipAsShortRange(blip, true)
+    wreckBlip = AddBlipForCoord(wreck.x, wreck.y, wreck.z)
+
+    SetBlipSprite(wreckBlip, 780)
+    SetBlipScale(wreckBlip, 0.8)
+    SetBlipColour(wreckBlip, 29)
+    SetBlipAsShortRange(wreckBlip, true)
     BeginTextCommandSetBlipName('STRING')
     AddTextComponentSubstringPlayerName(locale('wreck'))
-    EndTextCommandSetBlipName(blip)
+    EndTextCommandSetBlipName(wreckBlip)
 end
 
 local function attachTank()
@@ -103,6 +108,16 @@ AddEventHandler('onResourceStart', function(resource)
     local wreckData = lib.callback.await('m_diving:server:getLocation', false)
 
     setDivingLocation(wreckData)
+end)
+
+AddEventHandler('onResourceStop', function(resource)
+    if resource ~= cache.resource then return end
+
+    wreckZone:remove()
+
+    wreckZone = nil
+
+    RemoveBlip(wreckBlip)
 end)
 
 RegisterNetEvent('m_diving:client:newLocation', setDivingLocation)
