@@ -1,5 +1,6 @@
 local sharedConfig = require 'config.shared'
 local playerTanks = {}
+local wreck = {}
 
 ---@param source number
 local function deleteTank(source)
@@ -15,10 +16,16 @@ local function deleteTank(source)
 end
 
 local function getNewLocation()
+    if table.type(wreck) ~= 'empty' then
+        wreck = {}
+    end
+
     local wreckId = math.random(1, #sharedConfig.wrecks)
     local wreckType = math.random() < 0.5 and 'salvage' or 'looting'
 
-    TriggerClientEvent('m_diving:client:newLocation', -1, wreckId, wreckType)
+    wreck = { id = wreckId, type = wreckType }
+
+    TriggerClientEvent('m_diving:client:newLocation', -1, wreck)
 end
 
 lib.cron.new('*/30 * * * *', getNewLocation)

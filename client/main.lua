@@ -71,18 +71,20 @@ local function useDivingGear()
 end
 exports('UseDivingGear', useDivingGear)
 
-RegisterNetEvent('m_diving:client:newLocation', function(wreckId, wreckType)
-    local wreck = sharedConfig.wrecks[wreckId]
+RegisterNetEvent('m_diving:client:newLocation', function(wreckData)
+    if wreckZone then
+        wreckZone:remove()
 
-    wreckZone:remove()
+        wreckZone = 0
+    end
 
-    wreckZone = nil
+    local wreck = sharedConfig.wrecks[wreckData.id]
 
-    wreckZone = lib.point.new({
+    wreckZone = lib.points.new({
         coords = wreck.coords,
         distance = 60.0,
         points = wreck.points,
-        type = wreckType,
+        type = wreckData.type,
     })
 
     createBlip(wreck.coords)
