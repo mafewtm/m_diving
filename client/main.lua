@@ -1,4 +1,19 @@
 local config = require 'config.client'
+local sharedConfig = require 'config.shared'
+local wreckZone
+
+---@param wreck vector3
+local function createBlip(wreck)
+    local blip = AddBlipForCoord(wreck.x, wreck.y, wreck.z)
+
+    SetBlipSprite(blip, 780)
+    SetBlipScale(blip, 0.8)
+    SetBlipColour(blip, 29)
+    SetBlipAsShortRange(blip, true)
+    BeginTextCommandSetBlipName('STRING')
+    AddTextComponentSubstringPlayerName(locale('wreck'))
+    EndTextCommandSetBlipName(blip)
+end
 
 local function attachTank()
     local netId = lib.callback.await('m_diving:server:spawnTank', false)
@@ -69,4 +84,6 @@ RegisterNetEvent('m_diving:client:newLocation', function(wreckId, wreckType)
         points = wreck.points,
         type = wreckType,
     })
+
+    createBlip(wreck.coords)
 end)
