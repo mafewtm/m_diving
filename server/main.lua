@@ -30,6 +30,10 @@ end
 
 lib.cron.new('*/30 * * * *', getNewLocation)
 
+lib.callback.register('m_diving:server:getLocation', function()
+    return wreck
+end)
+
 lib.callback.register('m_diving:server:spawnTank', function(source)
     if playerTanks[source] then
         deleteTank(source)

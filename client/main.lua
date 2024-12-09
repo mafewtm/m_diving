@@ -71,7 +71,8 @@ local function useDivingGear()
 end
 exports('UseDivingGear', useDivingGear)
 
-RegisterNetEvent('m_diving:client:newLocation', function(wreckData)
+---@param wreckData table
+local function setDivingLocation(wreckData)
     if wreckZone then
         wreckZone:remove()
 
@@ -88,4 +89,12 @@ RegisterNetEvent('m_diving:client:newLocation', function(wreckData)
     })
 
     createBlip(wreck.coords)
+end
+
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+    local wreckData = lib.callback.await('m_diving:server:getLocation', false)
+
+    setDivingLocation(wreckData)
 end)
+
+RegisterNetEvent('m_diving:client:newLocation', setDivingLocation)
