@@ -55,3 +55,18 @@ local function useDivingGear()
     end
 end
 exports('UseDivingGear', useDivingGear)
+
+RegisterNetEvent('m_diving:client:newLocation', function(wreckId, wreckType)
+    local wreck = sharedConfig.wrecks[wreckId]
+
+    wreckZone:remove()
+
+    wreckZone = nil
+
+    wreckZone = lib.point.new({
+        coords = wreck.coords,
+        distance = 60.0,
+        points = wreck.points,
+        type = wreckType,
+    })
+end)

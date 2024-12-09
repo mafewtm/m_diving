@@ -1,3 +1,4 @@
+local sharedConfig = require 'config.shared'
 local playerTanks = {}
 
 ---@param source number
@@ -12,6 +13,15 @@ local function deleteTank(source)
         playerTanks[source] = nil
     end
 end
+
+local function getNewLocation()
+    local wreckId = math.random(1, #sharedConfig.wrecks)
+    local wreckType = math.random() < 0.5 and 'salvage' or 'looting'
+
+    TriggerClientEvent('m_diving:client:newLocation', -1, wreckId, wreckType)
+end
+
+lib.cron.new('*/30 * * * *', getNewLocation)
 
 lib.callback.register('m_diving:server:spawnTank', function(source)
     if playerTanks[source] then
