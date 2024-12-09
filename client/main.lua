@@ -97,4 +97,12 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     setDivingLocation(wreckData)
 end)
 
+AddEventHandler('onResourceStart', function(resource)
+    if resource ~= cache.resource then return end
+
+    local wreckData = lib.callback.await('m_diving:server:getLocation', false)
+
+    setDivingLocation(wreckData)
+end)
+
 RegisterNetEvent('m_diving:client:newLocation', setDivingLocation)

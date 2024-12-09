@@ -60,6 +60,12 @@ AddEventHandler('playerDropped', function()
     deleteTank(src)
 end)
 
+AddEventHandler('onResourceStart', function(resource)
+    if resource ~= cache.resource then return end
+
+    getNewLocation()
+end)
+
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= cache.resource then return end
 
