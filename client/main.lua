@@ -124,7 +124,10 @@ local function selectInteractable(entity, index, isSalvage)
 
         if #(coords - entityCoords) > 3.0 or not DoesEntityExist(entity) then return end
 
-        TriggerServerEvent('m_diving:server:lootCollected', entity, index, isSalvage)
+        local looted = lib.callback.await('m_diving:server:lootCollected', false, index, isSalvage)
+
+        if not looted then return end
+
         removeInteractables(index)
     else
         exports.qbx_core:Notify(locale('canceled'), 'error')

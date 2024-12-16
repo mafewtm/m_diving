@@ -79,31 +79,30 @@ RegisterNetEvent('m_diving:server:deleteTank', function()
     deleteTank(src)
 end)
 
-RegisterNetEvent('m_diving:server:lootCollected', function(entity, index, isSalvage)
-    local src = source
-
-    local player = exports.qbx_core:GetPlayer(src)
+lib.callback.register('m_diving:server:lootCollected', function(source, index, isSalvage)
+    local player = exports.qbx_core:GetPlayer(source)
 
     if not player then return end
 
-    local ped = GetPlayerPed(src)
+    local ped = GetPlayerPed(source)
     local coords = GetEntityCoords(ped)
-    local entityCoords = GetEntityCoords(entity)
-
-    if #(coords - entityCoords) > 3.0 then return end
 
     TriggerClientEvent('m_diving:client:removeInteractable', -1, index)
 
     local loot = isSalvage and config.loot.salvage.item or config.loot.looting.item
     local lootAmount = isSalvage and config.loot.salvage.amount or config.loot.looting.amount
 
-    if exports.ox_inventory:CanCarryItem(src, loot, lootAmount) then
-        exports.ox_inventory:AddItem(src, loot, lootAmount)
+    if exports.ox_inventory:CanCarryItem(source, loot, lootAmount) then
+        local added, _ = exports.ox_inventory:AddItem(source, loot, lootAmount)
+
+        return added
     else
         local label = isSalvage and locale('scrapped') or locale('treasure')
 
         exports.ox_inventory:CustomDrop(label, {
             { name = loot, count = lootAmount }
         }, coords, 1, 10.0, nil, `bkr_prop_duffel_bag_01a`)
+
+        return true
     end
 end)
