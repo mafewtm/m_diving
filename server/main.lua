@@ -29,7 +29,7 @@ end
 lib.cron.new('*/30 * * * *', getNewLocation)
 
 lib.callback.register('m_diving:server:getLocation', function()
-    return wreck
+   return wreck
 end)
 
 lib.callback.register('m_diving:server:spawnTank', function(source)
@@ -76,4 +76,33 @@ RegisterNetEvent('m_diving:server:deleteTank', function()
     local src = source
 
     deleteTank(src)
+end)
+
+RegisterNetEvent('m_diving:server:lootCollected', function(entity, index, isSalvage)
+    local src = source
+
+    local player = exports.qbx_core:GetPlayer(src)
+
+    if not player then return end
+
+    local ped = GetPlayerPed(src)
+    local coords = GetEntityCoords(ped)
+    local entityCoords = GetEntityCoords(entity)
+
+    if #(coords - entityCoords) > 3.0 then return end
+
+    TriggerClientEvent('m_diving:client:removeInteractable', -1, index)
+
+    local loot = isSalvage and 'metalscrap' or 'gold_coin'
+    local lootAmount = math.random(1, 5)
+
+    if exports.ox_inventory:CanCarryItem(src, loot, lootAmount) then
+        exports.ox_inventory:AddItem(src, loot, lootAmount)
+    else
+        local label = isSalvage and 'Scrapped Remnants' or 'Treasure'
+
+        exports.ox_inventory:CustomDrop(label, {
+            { name = loot, count = lootAmount }
+        }, coords, 1, 10.0, nil, `bkr_prop_duffel_bag_01a`)
+    end
 end)
