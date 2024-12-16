@@ -101,7 +101,7 @@ end
 local function selectInteractable(entity, index, isSalvage)
     if lib.progressBar({
         duration = 3500,
-        label = isSalvage and 'Breaking apart...' or 'Opening...',
+        label = isSalvage and locale('breaking') or locale('opening'),
         useWhileDead = false,
         allowSwimming = true,
         disable = {
@@ -151,7 +151,7 @@ local function onEnterDivingZone(self)
 
         exports.ox_target:addLocalEntity(object, {
             name = 'wreckLoot',
-            label = isSalvage and 'Break Apart' or 'Open',
+            label = isSalvage and locale('break_apart') or locale('open_chest'),
             icon = isSalvage and 'fas fa-wrench' or 'fas fa-box-open',
             canInteract = function()
                 return GetPedConfigFlag(cache.ped, 135, true)

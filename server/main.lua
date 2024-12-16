@@ -99,7 +99,7 @@ RegisterNetEvent('m_diving:server:lootCollected', function(entity, index, isSalv
     if exports.ox_inventory:CanCarryItem(src, loot, lootAmount) then
         exports.ox_inventory:AddItem(src, loot, lootAmount)
     else
-        local label = isSalvage and 'Scrapped Remnants' or 'Treasure'
+        local label = isSalvage and locale('scrapped') or locale('treasure')
 
         exports.ox_inventory:CustomDrop(label, {
             { name = loot, count = lootAmount }

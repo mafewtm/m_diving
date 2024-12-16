@@ -5,5 +5,11 @@
   "canceled": "Canceled...",
   "cannot_right_now": "You cannot do this right now...",
   "failed_spawn": "Failed to spawn the tank",
-  "failed_get_control": "Failed to gain control of the prop"
+  "failed_get_control": "Failed to gain control of the prop",
+  "break_apart": "Break Apart",
+  "breaking": "Breaking apart...",
+  "open_chest": "Open Chest",
+  "opening": "Opening...",
+  "scrapped": "Scrapped Remnants",
+  "treature": "Treature"
 }
