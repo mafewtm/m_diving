@@ -1,3 +1,4 @@
+local config = require 'config.server'
 local sharedConfig = require 'config.shared'
 local playerTanks = {}
 local wreck = {}
@@ -93,8 +94,8 @@ RegisterNetEvent('m_diving:server:lootCollected', function(entity, index, isSalv
 
     TriggerClientEvent('m_diving:client:removeInteractable', -1, index)
 
-    local loot = isSalvage and 'metalscrap' or 'gold_coin'
-    local lootAmount = math.random(1, 5)
+    local loot = isSalvage and config.loot.salvage.item or config.loot.looting.item
+    local lootAmount = isSalvage and config.loot.salvage.amount or config.loot.looting.amount
 
     if exports.ox_inventory:CanCarryItem(src, loot, lootAmount) then
         exports.ox_inventory:AddItem(src, loot, lootAmount)
