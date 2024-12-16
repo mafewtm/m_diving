@@ -1,5 +1,13 @@
 # m_diving
 
+Just another diving resource
+
+## Dependencies
+
+- qbx_core
+- ox_lib
+- ox_inventory
+
 ## Items (for ox_inventory)
 
 ```lua

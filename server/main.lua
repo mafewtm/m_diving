@@ -1,3 +1,7 @@
+assert(lib.checkDependency('qbx_core', '1.22.3'), 'qbx_core v1.22.3 or higher is required')
+assert(lib.checkDependency('ox_lib', '3.27.0'), 'ox_lib v3.27.0 or higher is required')
+assert(lib.checkDependency('ox_inventory', '2.43.3'), 'ox_inventory v2.43.3 or higher is required')
+
 local config = require 'config.server'
 local sharedConfig = require 'config.shared'
 local playerTanks = {}
