@@ -112,7 +112,7 @@ local function selectInteractable(entity, index, isSalvage)
         },
         anim = {
             dict = isSalvage and 'amb@world_human_welding@male@base' or 'anim@scripted@hs4f@ig14_open_car_trunk@male@',
-            clip = isSalvage and 'idle_a' or 'open_trunk_rushed',
+            clip = isSalvage and 'base' or 'open_trunk_rushed',
             blendIn = 8.0,
             flag = 16,
         },
