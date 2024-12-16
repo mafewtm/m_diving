@@ -57,32 +57,6 @@ lib.callback.register('m_diving:server:spawnTank', function(source)
     return netId
 end)
 
-AddEventHandler('playerDropped', function()
-    local src = source
-
-    deleteTank(src)
-end)
-
-AddEventHandler('onResourceStart', function(resource)
-    if resource ~= cache.resource then return end
-
-    getNewLocation()
-end)
-
-AddEventHandler('onResourceStop', function(resource)
-    if resource ~= cache.resource then return end
-
-    for i in pairs(playerTanks) do
-        deleteTank(i)
-    end
-end)
-
-RegisterNetEvent('m_diving:server:deleteTank', function()
-    local src = source
-
-    deleteTank(src)
-end)
-
 lib.callback.register('m_diving:server:lootCollected', function(source, index, isSalvage)
     local player = exports.qbx_core:GetPlayer(source)
 
@@ -109,4 +83,30 @@ lib.callback.register('m_diving:server:lootCollected', function(source, index, i
 
         return true
     end
+end)
+
+AddEventHandler('playerDropped', function()
+    local src = source
+
+    deleteTank(src)
+end)
+
+AddEventHandler('onResourceStart', function(resource)
+    if resource ~= cache.resource then return end
+
+    getNewLocation()
+end)
+
+AddEventHandler('onResourceStop', function(resource)
+    if resource ~= cache.resource then return end
+
+    for i in pairs(playerTanks) do
+        deleteTank(i)
+    end
+end)
+
+RegisterNetEvent('m_diving:server:deleteTank', function()
+    local src = source
+
+    deleteTank(src)
 end)
