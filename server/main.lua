@@ -58,7 +58,7 @@ lib.callback.register('m_diving:server:spawnTank', function(source)
 end)
 
 lib.callback.register('m_diving:server:lootCollected', function(source, index)
-    if type(index) ~= 'number' then return end
+    if type(index) ~= 'number' or index <= 0 or index > #sharedConfig.wrecks[wreck.id].points then return end
 
     local player = exports.qbx_core:GetPlayer(source)
 
