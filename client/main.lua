@@ -167,6 +167,7 @@ end
 
 ---@param wreckData table
 local function setDivingLocation(wreckData)
+    wreckPoint:remove()
     wreckPoint = {}
 
     removeInteractables()
@@ -202,6 +203,7 @@ end)
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= cache.resource then return end
 
+    wreckPoint:remove()
     wreckPoint = {}
 
     if DoesBlipExist(wreckBlip) then
