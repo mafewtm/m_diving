@@ -1,8 +1,8 @@
 local config = require 'config.client'
 local sharedConfig = require 'config.shared'
-local wreckZone = {}
+local wreckPoint = {}
 local activeInteractables = {}
-local wreckBlip
+local wreckBlip = 0
 
 ---@param wreck vector3
 local function createBlip(wreck)
@@ -136,18 +136,18 @@ end
 
 ---@param self CPoint
 local function onEnterDivingZone(self)
-    local isSalvage = self.type == 'salvage'
+    local isSalvage = self.wreck.type == 'salvage'
     local model = isSalvage and `prop_rail_wheel01` or `tr_prop_tr_chest_01a`
 
-    for i = 1, #self.points do
-        local point = self.points[i]
-        local object = CreateObject(model, point.x, point.y, point.z, false, true, false)
+    for i = 1, #self.interactables do
+        local interactable = self.interactables[i]
+        local object = CreateObject(model, interactable.x, interactable.y, interactable.z, false, false, false)
 
         lib.waitFor(function()
             if DoesEntityExist(object) then
                 return true
             end
-        end, 'failed to spawn '..model, 2000)
+        end, locale('failed_spawn'), 2000)
 
         PlaceObjectOnGroundProperly(object)
         FreezeEntityPosition(object, true)
@@ -175,21 +175,17 @@ end
 
 ---@param wreckData table
 local function setDivingLocation(wreckData)
-    if table.type(wreckZone) ~= 'empty' then
-        wreckZone:remove()
-
-        wreckZone = nil
-    end
+    wreckPoint = {}
 
     removeInteractables()
 
     local wreck = sharedConfig.wrecks[wreckData.id]
 
-    wreckZone = lib.points.new({
+    wreckPoint = lib.points.new({
         coords = wreck.coords,
         distance = 100.0,
-        points = wreck.points,
-        type = wreckData.type,
+        wreck = wreckData,
+        interactables = wreck.points,
         onEnter = onEnterDivingZone,
         onExit = onExitDivingZone,
     })
@@ -214,13 +210,10 @@ end)
 AddEventHandler('onResourceStop', function(resource)
     if resource ~= cache.resource then return end
 
-    wreckZone:remove()
-    wreckZone = nil
+    wreckPoint = {}
 
     if DoesBlipExist(wreckBlip) then
         RemoveBlip(wreckBlip)
-
-        wreckBlip = nil
     end
 
     removeInteractables()
