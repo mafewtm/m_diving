@@ -57,40 +57,6 @@ lib.callback.register('m_diving:server:spawnTank', function(source)
     return netId
 end)
 
-lib.callback.register('m_diving:server:lootCollected', function(source, index)
-    if type(index) ~= 'number' or index <= 0 or index > #sharedConfig.wrecks[wreck.id].points then return end
-
-    local player = exports.qbx_core:GetPlayer(source)
-
-    if not player then return end
-
-    local ped = GetPlayerPed(source)
-    local coords = GetEntityCoords(ped)
-    local interactable = sharedConfig.wrecks[wreck.id].points[index]
-    local interactableCoords = vec3(interactable.x, interactable.y, interactable.z)
-
-    if #(coords - interactableCoords) > 3.0 then return end
-
-    TriggerClientEvent('m_diving:client:removeInteractable', -1, index)
-
-    local loot = wreck.type == 'salvage' and config.loot.salvage.item or config.loot.looting.item
-    local lootAmount = wreck.type == 'salvage' and config.loot.salvage.amount or config.loot.looting.amount
-
-    if exports.ox_inventory:CanCarryItem(source, loot, lootAmount) then
-        local added, _ = exports.ox_inventory:AddItem(source, loot, lootAmount)
-
-        return added
-    else
-        local label = wreck.type == 'salvage' and locale('scrapped') or locale('treasure')
-
-        exports.ox_inventory:CustomDrop(label, {
-            { name = loot, count = lootAmount }
-        }, coords, 1, 10.0, nil, `bkr_prop_duffel_bag_01a`)
-
-        return true
-    end
-end)
-
 AddEventHandler('playerDropped', function()
     local src = source
 
@@ -115,4 +81,34 @@ RegisterNetEvent('m_diving:server:deleteTank', function()
     local src = source
 
     deleteTank(src)
+end)
+
+RegisterNetEvent('m_diving:server:lootCollected', function(source, index)
+    if type(index) ~= 'number' or index <= 0 or index > #sharedConfig.wrecks[wreck.id].points then return end
+
+    local player = exports.qbx_core:GetPlayer(source)
+
+    if not player then return end
+
+    local ped = GetPlayerPed(source)
+    local coords = GetEntityCoords(ped)
+    local interactable = sharedConfig.wrecks[wreck.id].points[index]
+    local interactableCoords = vec3(interactable.x, interactable.y, interactable.z)
+
+    if #(coords - interactableCoords) > 3.0 then return end
+
+    TriggerClientEvent('m_diving:client:removeInteractable', -1, index)
+
+    local loot = wreck.type == 'salvage' and config.loot.salvage.item or config.loot.looting.item
+    local lootAmount = wreck.type == 'salvage' and config.loot.salvage.amount or config.loot.looting.amount
+
+    if exports.ox_inventory:CanCarryItem(source, loot, lootAmount) then
+        exports.ox_inventory:AddItem(source, loot, lootAmount)
+    else
+        local label = wreck.type == 'salvage' and locale('scrapped') or locale('treasure')
+
+        exports.ox_inventory:CustomDrop(label, {
+            { name = loot, count = lootAmount }
+        }, coords, 1, 10.0, nil, `bkr_prop_duffel_bag_01a`)
+    end
 end)

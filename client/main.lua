@@ -116,11 +116,7 @@ local function selectInteractable(entity, index, isSalvage)
 
         if #(coords - entityCoords) > 3.0 then return end
 
-        local looted = lib.callback.await('m_diving:server:lootCollected', false, index)
-
-        if not looted then return end
-
-        removeInteractables(index)
+        TriggerServerEvent('m_diving:server:lootCollected', index)
     else
         exports.qbx_core:Notify(locale('canceled'), 'error')
     end
