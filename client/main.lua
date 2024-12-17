@@ -28,14 +28,6 @@ local function attachTank()
     if DoesEntityExist(tank) then
         local bone = GetPedBoneIndex(cache.ped, 24818)
 
-        NetworkRequestControlOfEntity(tank)
-
-        lib.waitFor(function()
-            if NetworkGetEntityOwner(tank) == cache.playerId then
-                return true
-            end
-        end, locale('failed_get_control'), 3000)
-
         AttachEntityToEntity(tank, cache.ped, bone, -0.25, -0.25, 0.0, 180.0, 90.0, 0.0, true, true, false, false, 2, true)
     end
 end
