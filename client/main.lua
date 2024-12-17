@@ -109,14 +109,14 @@ local function selectInteractable(entity, index, isSalvage)
             flag = 16,
         },
     }) then
-        if not activeInteractables[index] then return end
+        if not activeInteractables[index] or not DoesEntityExist(entity) or entity ~= activeInteractables[index] then return end
 
         local coords = GetEntityCoords(cache.ped)
         local entityCoords = GetEntityCoords(entity)
 
-        if #(coords - entityCoords) > 3.0 or not DoesEntityExist(entity) then return end
+        if #(coords - entityCoords) > 3.0 then return end
 
-        local looted = lib.callback.await('m_diving:server:lootCollected', false, index, isSalvage)
+        local looted = lib.callback.await('m_diving:server:lootCollected', false, index)
 
         if not looted then return end
 
